@@ -12,9 +12,14 @@ def tasks():
     date= datetime.now()
     now= date.strftime("%Y-%m-%d")
 
+    categories = [Category(name="Business"), Category(name="Personal"), Category(name="Other")]
+    for c in categories:
+        db.session.add(c)
+    db.session.commit()
+    
     form= TaskForm()
     form.category.choices =[(category.id, category.name) for category in Category.query.all()]
-    todo = None
+    todo= Todo.query.all()
     if request.method == "POST":
         if request.form.get('taskDelete') is not None:
             deleteTask = request.form.get('checkedbox')
@@ -22,7 +27,7 @@ def tasks():
                 todo = Todo.query.filter_by(id=int(deleteTask)).one()
                 db.session.delete(todo)
                 db.session.commit()
-                return redirect(url_for('tasks'))
+                return redirect(url_for('task.tasks'))
             else:
                 check = 'Please check-box of task to be deleted'
 
@@ -33,6 +38,6 @@ def tasks():
             db.session.add(todo)
             db.session.commit()
             flash('Congratulations, you just added a new note')
-            return redirect(url_for('tasks'))
+            return redirect(url_for('task.tasks'))
 
     return render_template('tasks.html', title='Create Tasks', form=form, todo=todo, DateNow=now, check=check)

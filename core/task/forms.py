@@ -3,7 +3,7 @@ from wtforms import StringField, TimeField, DateField, SubmitField, SelectField
 from flask_sqlalchemy import SQLAlchemy
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask import Flask
-from core.config import Configuration
+from config import Configuration
 app = Flask(__name__)
 app.config.from_object(Configuration)
 db = SQLAlchemy(app)
